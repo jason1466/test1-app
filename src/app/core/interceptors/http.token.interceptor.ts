@@ -43,14 +43,16 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     if (req.url.search(/\b\/\.auth\/me/g) == -1) {
       // let token = this.jwtService.getToken();
       console.log("/.auth/me not found in req.url: ");
-      await this.http
+      token = await this.http
         .get<any>("https://teamwizapp.azurewebsites.net/.auth/me")
-        .subscribe(x => {
-          token = x.access_token;
-          console.log(
-            "back from getMe.subscribe() access_token result: " + token
-          );
-        });
+        .toPromise()
+        .then(x => x.access_token);
+      // .subscribe(x => {
+      //   token = x.access_token;
+      //   console.log(
+      //     "back from getMe.subscribe() access_token result: " + token
+      //   );
+      // });
     }
 
     if (token) {
