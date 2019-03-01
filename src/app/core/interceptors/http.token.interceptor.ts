@@ -25,21 +25,26 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     };
 
     let token = req.headers.get("x-ms-token-aad-access_token");
-    // let token = this.jwtService.getToken();
     console.log("x-ms-token-aad-access_token: " + token);
-    this.getMe().then(data => {
-      token = data;
-    });
+
+    if (req.url.search(/\b\/.auth\/me/g) < 0) {
+      // let token = this.jwtService.getToken();
+      this.getAuthMe().then(data => {
+        token = data;
+      });
+    }
+
     if (token) {
       headersConfig["Authorization"] = `Bearer ${token}`;
       console.log(".auth/me token: " + token);
       // headersConfig['Authorization'] = `Token ${token}`;
     }
+
     const request = req.clone({ setHeaders: headersConfig });
     return next.handle(request);
   }
 
-  async getMe(): Promise<string> {
+  async getAuthMe(): Promise<string> {
     return await this.apiService
       .get("/.auth/me")
       .toPromise()
