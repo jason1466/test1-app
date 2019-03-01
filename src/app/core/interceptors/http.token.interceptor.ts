@@ -42,21 +42,23 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
     if (token) {
       headersConfig["Authorization"] = `Bearer ${token}`;
-      console.log(".auth/me token: " + token);
       // headersConfig['Authorization'] = `Token ${token}`;
     }
 
+    console.log("exiting HttpInterceptor, token is: " + token);
     const request = req.clone({ setHeaders: headersConfig });
     return next.handle(request);
   }
 
   async getAuthMe(): Promise<string> {
-    return await this.http
+    let foo = this.http
       .get<any>("https://teamwizapp.azurewebsites.net/.auth/me")
-      .toPromise()
-      .then(data => {
-        console.log("in getMe.then() data result: " + data);
-        return data.access_token;
-      });
+      .toPromise();
+
+    await foo.then(data => {
+      console.log("in getMe.then() data result: " + data);
+      return data.access_token;
+    });
+    return foo;
   }
 }
