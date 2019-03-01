@@ -1,12 +1,15 @@
 <div class="auth-page">
   <div class="container page">
     <div class="row">
-
       <div class="col-md-6 offset-md-3 col-xs-12">
         <h1 class="text-xs-center">{{ title }}</h1>
         <p class="text-xs-center">
-          <a [routerLink]="['/login']" *ngIf="authType == 'register'">Have an account?</a>
-          <a [routerLink]="['/register']" *ngIf="authType == 'login'">Need an account?</a>
+          <a [routerLink]="['/login']" *ngIf="authType == 'register'"
+            >Have an account?</a
+          >
+          <a [routerLink]="['/register']" *ngIf="authType == 'login'"
+            >Need an account?</a
+          >
         </p>
         <app-list-errors [errors]="errors"></app-list-errors>
         <form [formGroup]="authForm" (ngSubmit)="submitForm()">
@@ -17,29 +20,70 @@
                 placeholder="Username"
                 class="form-control form-control-lg"
                 type="text"
-                *ngIf="authType == 'register'" />
+                *ngIf="authType == 'register'"
+              />
             </fieldset>
             <fieldset class="form-group">
               <input
                 formControlName="email"
                 placeholder="Email"
                 class="form-control form-control-lg"
-                type="text" />
+                type="text"
+              />
             </fieldset>
             <fieldset class="form-group">
               <input
                 formControlName="password"
                 placeholder="Password"
                 class="form-control form-control-lg"
-                type="password" />
+                type="password"
+              />
             </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right" [disabled]="!authForm.valid" type="submit">
+            <button
+              class="btn btn-lg btn-primary pull-xs-right"
+              [disabled]="!authForm.valid"
+              type="submit"
+            >
               {{ title }}
             </button>
           </fieldset>
         </form>
       </div>
 
+      <div class="offset-md-5">
+        <br />
+        <br />
+        <div>
+          <a href="/.auth/login/google?post_login_redirect_url=/register"
+            >Log in with Google</a
+          >
+        </div>
+        <br />
+        <div>
+          <a
+            href="/.auth/login/microsoftaccount?post_login_redirect_url=/register"
+            >Log in with Microsoft Account</a
+          >
+        </div>
+        <br />
+        <div>
+          <a href="/.auth/login/facebook?post_login_redirect_url=/register"
+            >Log in with Facebook</a
+          >
+        </div>
+        <br />
+        <div>
+          <a href="/.auth/login/twitter?post_login_redirect_url=/register"
+            >Log in with Twitter</a
+          >
+        </div>
+        <br />
+        <div>
+          <a href="/.auth/login/aad?post_login_redirect_url=/register"
+            >Log in with Azure AD</a
+          >
+        </div>
+      </div>
     </div>
   </div>
 </div>
