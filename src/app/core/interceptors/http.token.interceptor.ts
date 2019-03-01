@@ -60,7 +60,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
     console.log("exiting HttpInterceptor, token is: " + token);
     const request = req.clone({ setHeaders: headersConfig });
-    return next.handle(request);
+    return next.handle(request).toPromise();
   }
 
   // getAuthMe(): Observable<string> {
