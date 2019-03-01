@@ -42,7 +42,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
   async getMe(): Promise<any> {
     // let token;
-    return await this.apiService.get<any>("/.auth/me").toPromise();
+    return await this.apiService.get<any>("/.auth/me").toPromise<any>();
     // return token;
   }
 }
