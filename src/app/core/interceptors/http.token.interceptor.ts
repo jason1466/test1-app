@@ -46,7 +46,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       token = await this.http
         .get<any>("https://teamwizapp.azurewebsites.net/.auth/me")
         .toPromise()
-        .then(x => x.access_token);
+        .then(x => x[0].access_token);
       // .subscribe(x => {
       //   token = x.access_token;
       //   console.log(
