@@ -29,7 +29,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     let token = req.headers.get("x-ms-token-aad-access_token");
     // let token = this.jwtService.getToken();
     token = this.getMe().then(data => {
-      token = data.access_token;
+      token = data;
     });
     if (token) {
       headersConfig["Authorization"] = `Bearer ${token}`;
@@ -40,9 +40,12 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     return next.handle(request);
   }
 
-  async getMe(): Promise<any> {
-    // let token;
-    return await this.apiService.get<any>("/.auth/me").toPromise<any>();
-    // return token;
+  async getMe(): Promise<string> {
+    return await this.apiService
+      .get("/.auth/me")
+      .toPromise()
+      .then(data => {
+        return data.access_token;
+      });
   }
 }
