@@ -46,7 +46,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
   async getAuthMe(): Promise<string> {
     return await this.http
-      .get("/.auth/me")
+      .get<any>("/.auth/me")
       .toPromise()
       .then(data => {
         console.log("in getMe.then()");
