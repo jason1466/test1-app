@@ -34,10 +34,9 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     if (req.url.search(/\b\/\.auth\/me/g) == -1) {
       // let token = this.jwtService.getToken();
       console.log("/.auth/me not found in req.url: ");
-      this.getAuthMe().then(data => {
-        console.log("back from getMe.then() data result: " + data);
-        token = data;
-      });
+      token = this.getAuthMe().then(data => data);
+      // console.log("back from getMe.then() data result: " + data);
+      // token = data;
     }
 
     if (token) {
@@ -51,14 +50,13 @@ export class HttpTokenInterceptor implements HttpInterceptor {
   }
 
   async getAuthMe(): Promise<string> {
-    let foo = this.http
+    // let bar = this.http.post("https://teamwizapp.azurewebsites.net/.auth/login/google", { "id_token": "<id_token>")
+    let foo = await this.http
       .get<any>("https://teamwizapp.azurewebsites.net/.auth/me")
-      .toPromise();
-
-    await foo.then(data => {
-      console.log("in getMe.then() data result: " + data);
-      return data.access_token;
-    });
+      .toPromise()
+      .then(data => data.access_token);
+    // return data.access_token;
+    console.log("in getMe.then() data result: " + foo);
     return foo;
   }
 }
