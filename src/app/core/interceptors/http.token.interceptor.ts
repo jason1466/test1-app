@@ -8,12 +8,12 @@ import {
 import { Observable } from "rxjs";
 
 import { JwtService } from "../services";
-import { ApiService } from "../services";
+import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
 import { map } from "rxjs/operators";
 
 @Injectable()
 export class HttpTokenInterceptor implements HttpInterceptor {
-  constructor(private jwtService: JwtService, private apiService: ApiService) {}
+  constructor(private jwtService: JwtService, private http: HttpClient) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -45,7 +45,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
   }
 
   async getAuthMe(): Promise<string> {
-    return await this.apiService
+    return await this.http
       .get("/.auth/me")
       .toPromise()
       .then(data => {
