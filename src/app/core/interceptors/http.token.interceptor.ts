@@ -47,21 +47,18 @@ export class HttpTokenInterceptor implements HttpInterceptor {
         .get<any>("https://teamwizapp.azurewebsites.net/.auth/me")
         .toPromise()
         .then(x => x[0].access_token);
-      // .subscribe(x => {
-      //   token = x.access_token;
-      //   console.log(
-      //     "back from getMe.subscribe() access_token result: " + token
-      //   );
-      // });
     }
 
-    if (token) {
-      headersConfig["Authorization"] = `Bearer ${token}`;
-      // headersConfig['Authorization'] = `Token ${token}`;
-    }
+    // if (token) {
+    //   headersConfig["Authorization"] = `Bearer ${token}`;
+    //   // headersConfig['Authorization'] = `Token ${token}`;
+    // }
 
     console.log("exiting HttpInterceptor, token is: " + token);
-    const request = req.clone({ setHeaders: headersConfig });
+    const request = req.clone({
+      setHeaders: headersConfig,
+      withCredentials: true
+    });
     return next.handle(request).toPromise();
   }
 
