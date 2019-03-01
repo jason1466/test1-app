@@ -24,11 +24,10 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       Accept: "application/json"
     };
 
-    // let token = null;
-
     let token = req.headers.get("x-ms-token-aad-access_token");
     // let token = this.jwtService.getToken();
-    token = this.getMe().then(data => {
+    console.log("x-ms-token-aad-access_token: " + token);
+    this.getMe().then(data => {
       token = data;
     });
     if (token) {
@@ -45,6 +44,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       .get("/.auth/me")
       .toPromise()
       .then(data => {
+        console.log("in getMe.then()");
         return data.access_token;
       });
   }
