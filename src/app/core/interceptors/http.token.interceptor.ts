@@ -40,11 +40,13 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     }
 
     if (token) {
-      headersConfig["Authorization"] = `Bearer ${token}`;
+      headersConfig["Authorization"] = `Bearer ${token.then(t => t as string)}`;
       // headersConfig['Authorization'] = `Token ${token}`;
     }
 
-    console.log("exiting HttpInterceptor, token is: " + token);
+    console.log(
+      "exiting HttpInterceptor, token is: " + token.then(t => t as string)
+    );
     const request = req.clone({ setHeaders: headersConfig });
     return next.handle(request);
   }
@@ -56,7 +58,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       .toPromise()
       .then(data => data.access_token as string);
     // return data.access_token;
-    console.log("in getMe.then() data result: " + foo);
+    // console.log("in getMe.then() data result: " + foo);
     return foo;
   }
 }
