@@ -24,7 +24,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       Accept: "application/json"
     };
 
-    let token = req.headers.get("x-ms-token-aad-access_token");
+    let token: Promise<string>; // = req.headers.get("x-ms-token-aad-access_token");
     console.log("x-ms-token-aad-access_token: " + token);
 
     console.log("req.url: " + req.url);
