@@ -31,10 +31,11 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     console.log("req.url.search result: " + req.url.search(/\b\/\.auth\/me/g));
     console.log("req.url.indexOf result: " + req.url.indexOf(".auth/me"));
 
-    if (req.url.indexOf(".auth/me") == -1) {
+    if (req.url.search(/\b\/\.auth\/me/g) == -1) {
       // let token = this.jwtService.getToken();
       console.log("/.auth/me not found in req.url: ");
       this.getAuthMe().then(data => {
+        console.log("back from getMe.then() data result: " + data);
         token = data;
       });
     }
@@ -54,7 +55,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       .get<any>("https://teamwizapp.azurewebsites.net/.auth/me")
       .toPromise()
       .then(data => {
-        console.log("in getMe.then()");
+        console.log("in getMe.then() data result: " + data);
         return data.access_token;
       });
   }
