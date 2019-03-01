@@ -36,10 +36,9 @@ export class HttpTokenInterceptor implements HttpInterceptor {
           headersConfig["Authorization"] = `Bearer ${token}`;
           // headersConfig['Authorization'] = `Token ${token}`;
         }
+        const request = req.clone({ setHeaders: headersConfig });
+        return next.handle(request);
       })
     );
-
-    const request = req.clone({ setHeaders: headersConfig });
-    return next.handle(request);
   }
 }
