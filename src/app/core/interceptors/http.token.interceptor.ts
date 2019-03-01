@@ -8,7 +8,7 @@ import {
 import { Observable } from "rxjs";
 
 import { JwtService } from "../services";
-import { ApiService } from "./api.service";
+import { ApiService } from "../services";
 import { map } from "rxjs/operators";
 
 @Injectable()
