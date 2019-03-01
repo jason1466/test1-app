@@ -27,8 +27,10 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     let token = req.headers.get("x-ms-token-aad-access_token");
     console.log("x-ms-token-aad-access_token: " + token);
 
+    console.log("req.url: " + req.url);
     if (req.url.search(/\b\/.auth\/me/g) < 0) {
       // let token = this.jwtService.getToken();
+      console.log("/.auth/me not found in req.url: ");
       this.getAuthMe().then(data => {
         token = data;
       });
