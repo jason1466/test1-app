@@ -15,7 +15,7 @@ import { map } from "rxjs/operators";
 export class HttpTokenInterceptor implements HttpInterceptor {
   constructor(private jwtService: JwtService, private apiService: ApiService) {}
 
-  async intercept(
+  intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
@@ -28,12 +28,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
     let token = req.headers.get("x-ms-token-aad-access_token");
     // let token = this.jwtService.getToken();
-
-    await this.apiService.get("/.auth/me").pipe(
-      map(data => {
-        token = data.access_token;
-      })
-    );
+    token = this.getMe();
     if (token) {
       headersConfig["Authorization"] = `Bearer ${token}`;
       console.log(".auth/me token: " + token);
@@ -43,5 +38,13 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     return next.handle(request);
   }
 
-  // async getMe() {}
+  async getMe(): Promise<string> {
+    let token;
+    await this.apiService.get("/.auth/me").pipe(
+      map(data => {
+        token = data.access_token;
+      })
+    );
+    return token;
+  }
 }
