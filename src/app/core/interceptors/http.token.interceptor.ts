@@ -44,7 +44,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
     if (
       !this.me &&
-      !this.me.access_token &&
+      // !this.me.access_token &&
       req.url.search(/\b\/\.auth\/me/g) == -1
     ) {
       // let token = this.jwtService.getToken();
@@ -57,7 +57,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
         });
     }
 
-    if (this.me.access_token) {
+    if (this.me && this.me.access_token) {
       headersConfig["Authorization"] = `Bearer ${this.me.access_token}`;
     }
 
