@@ -32,8 +32,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
     const headersConfig = {
       "Content-Type": "application/json",
-      Accept: "application/json",
-      withCredentials: true
+      Accept: "application/json"
     };
 
     // let token: Promise<string>; // = req.headers.get("x-ms-token-aad-access_token");
