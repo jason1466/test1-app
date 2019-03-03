@@ -15,6 +15,8 @@ import { map } from "rxjs/operators";
 export class HttpTokenInterceptor implements HttpInterceptor {
   constructor(private jwtService: JwtService, private http: HttpClient) {}
 
+  me: { access_token: string };
+
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
@@ -26,11 +28,12 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Promise<HttpEvent<any>> {
-    let token: string;
+    // let token: string;
 
     const headersConfig = {
       "Content-Type": "application/json",
-      Accept: "application/json"
+      Accept: "application/json",
+      withCredentials: true
     };
 
     // let token: Promise<string>; // = req.headers.get("x-ms-token-aad-access_token");
@@ -40,21 +43,26 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     // console.log("req.url.search result: " + req.url.search(/\b\/\.auth\/me/g));
     // console.log("req.url.indexOf result: " + req.url.indexOf(".auth/me"));
 
-    if (req.url.search(/\b\/\.auth\/me/g) == -1) {
+    if (
+      !this.me &&
+      !this.me.access_token &&
+      req.url.search(/\b\/\.auth\/me/g) == -1
+    ) {
       // let token = this.jwtService.getToken();
-      console.log("/.auth/me not found in req.url: ");
-      token = await this.http
+      await this.http
         .get<any>("https://teamwizapp.azurewebsites.net/.auth/me")
         .toPromise()
-        .then(x => x[0].access_token);
+        .then(x => {
+          this.me = x[0];
+          return x[0].access_token;
+        });
     }
 
-    // if (token) {
-    //   headersConfig["Authorization"] = `Bearer ${token}`;
-    //   // headersConfig['Authorization'] = `Token ${token}`;
-    // }
+    if (this.me.access_token) {
+      headersConfig["Authorization"] = `Bearer ${this.me.access_token}`;
+    }
 
-    console.log("exiting HttpInterceptor, token is: " + token);
+    console.log("exiting HttpInterceptor, token is: " + this.me.access_token);
     const request = req.clone({
       setHeaders: headersConfig,
       withCredentials: true
