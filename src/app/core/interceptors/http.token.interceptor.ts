@@ -15,7 +15,7 @@ import { map } from "rxjs/operators";
 export class HttpTokenInterceptor implements HttpInterceptor {
   constructor(private jwtService: JwtService, private http: HttpClient) {}
 
-  me: { access_token: string };
+  me: { access_token: string } = { access_token: null };
 
   intercept(
     req: HttpRequest<any>,
@@ -43,8 +43,8 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     // console.log("req.url.indexOf result: " + req.url.indexOf(".auth/me"));
 
     if (
-      !this.me &&
-      // !this.me.access_token &&
+      // !this.me &&
+      !this.me.access_token &&
       req.url.search(/\b\/\.auth\/me/g) == -1
     ) {
       // let token = this.jwtService.getToken();
@@ -53,11 +53,11 @@ export class HttpTokenInterceptor implements HttpInterceptor {
         .toPromise()
         .then(x => {
           this.me = x[0];
-          return x[0].access_token;
+          // return x[0].access_token;
         });
     }
 
-    if (this.me && this.me.access_token) {
+    if (this.me.access_token) {
       headersConfig["Authorization"] = `Bearer ${this.me.access_token}`;
     }
 
